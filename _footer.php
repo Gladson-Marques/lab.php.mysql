@@ -14,13 +14,15 @@
     </a>
 
 </footer>
-
+&nbsp;
 </div>
 
-<!-- Importa o JavaScript do tema -->
+<?php // Importa o JavaScript do tema 
+?>
 <script src="assets/js/global.js"></script>
 
-<!-- Importa o JavaScript específico desta página -->
+<?php // Importa o JavaScript específico desta página dinâmicamente 
+?>
 <script src="assets/js/<?php echo $page["js"] ?>"></script>
 </body>
 
