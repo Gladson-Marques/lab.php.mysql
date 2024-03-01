@@ -1,5 +1,4 @@
 /* Importa a fonte padrão do site */
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 /* Importa o CSS do Font Awesome (Biblioteca de ícones) */
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css");
@@ -22,7 +21,7 @@ body {
     padding: 0;
     margin: 0;
     /* Define as fontes do tema */
-    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    font-family:'Times New Roman', Times, serif;
     /* Define a largura da letra "m" (1rem = 16 pixels) */
     font-size: 16px;
     line-height: 1.3;
