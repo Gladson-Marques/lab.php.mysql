@@ -11,7 +11,7 @@ if (document.body.contains(frmError)) {
     // Timer para fechar em 'seconds' segundos
     // Se não quise usar, comente as linhas
     const seconds = 5;
-    setTimeout(closeMe, seconds * 1000);
+    // setTimeout(closeMe, seconds * 1000);
 }
 
 // Função que fecha a caixa de erro
