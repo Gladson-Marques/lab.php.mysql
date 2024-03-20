@@ -83,6 +83,8 @@ LIMIT 3;
 
 SQL;
 
+
+
 // Executa a query e armazena os resultados em '$res'
 $res = $conn->query($sql);
 
@@ -137,6 +139,9 @@ require('_header.php');
 <aside>
     <h3>Artigos + vistos</h3>
     <?php echo $aside_viewed ?>
+    <h3>Artigos + comentados</h3>
+
 </aside>
 
 <?php require('_footer.php') ?>
+
