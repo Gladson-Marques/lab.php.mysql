@@ -1,60 +1,70 @@
 <?php
 
-// Obtém uma lista de artigos mais visualizados no site
+/**
+ *********** Atividade 1 ***********
+ * Total a ser exibido, por default '3'
+ * Para alterar este valor, no código principal, defina $num_list antes de 
+ * fazer o require() deste código.
+ **/ 
+$num_list = isset($num_list) ? intval($num_list) : 3;
+
+// Obtém uma lista de artigos mais comentados no site
+// Referências: https://www.w3schools.com/mysql/mysql_groupby.asp
 $sql = <<<SQL
 
 SELECT 
-cmt_article, 
-    art_title, art_summary, 
-    COUNT(*) AS total_comments
+    -- ID do artigo
+    cmt_article, 
+    -- Conta os registros / comentários
+    COUNT(*) AS total_comments,
+    -- Dados do artigo
+    art_title, art_summary    
 FROM comment
+    -- Relacionamento entre tabelas comment e article
     INNER JOIN article ON cmt_article = art_id
-WHERE cmt_status = 'on'
+WHERE 
+    -- Requisitos pré estabelecidos
+    cmt_status = 'on'
+    AND art_status = 'on' 
+    AND art_date <= NOW()
+-- Agrupa os registros que tem o mesmo cmt_article (ID do artigo)
 GROUP BY cmt_article
+-- Ordena pelo total de registros / comentários
 ORDER BY total_comments DESC
-LIMIT 3;
+-- Limita os registros
+LIMIT {$num_list};
 
 SQL;
-
-// Executa a query e armazena os resultados em '$res'
 $res = $conn->query($sql);
 
-// Variável acumuladora. Armazena cada um dos artigos.
-$aside_commented = '<h3>Artigos + comentados</h3><div class="commented">';
+// Se existem artigos:
+if ($res->num_rows > 0) :
 
-// Loop para obter cada registro
-while ($mv = $res->fetch_assoc()) :
+    $html_view = '<h3>+ Comentados</h3>';
 
-    // Cria uma variável '$art_summary' para o resumo
-    $art_summary = $mv['art_summary'];
+    while ($art = $res->fetch_assoc()) :
 
-    // Se o resumo tem mais de X caracteres
-    // Referências: https://www.w3schools.com/php/func_string_strlen.asp
-    if (strlen($mv['art_summary']) > $site['summary_length'])
+        if ($art['total_comments'] == 1)
+            $tot = '1 comentário.';
+        else
+            $tot = $art['total_comments'] . ' comentários';
 
-        // Corta o resumo para a quantidade de caracteres correta
-        // Referências: https://www.php.net/mb_substr
-        $art_summary = mb_substr(
-            $mv['art_summary'],         // String completa, a ser cortada
-            0,                          // Posição do primeiro caracter do corte
-            $site['summary_length']     // Tamanho do corte
-        ) . "...";                      // Concatena reticências no final
+        $html_view .= <<<HTML
 
-    // Monta a view HTML
-    $aside_commented .= <<<HTML
-
-<div onclick="location.href = '_comments.php?id={$mv['art_id']}'">
-    <img src="{$mv['art_thumbnail']}" alt="{$mv['art_title']}">
-    <div>
-    <h5>{$mv['art_title']}</h5>
-    <p><small title="{$mv['art_summary']}">{$art_summary}</small></p>
-    </div>
+<div onclick="location.href='view.php?id={$art['cmt_article']}'">
+    <h5>{$art['art_title']}</h5>
+    <small>{$art['art_summary']}</small>
+    <small class="footer">{$tot}</small>
 </div>
 
 HTML;
-endwhile;
 
-$aside_commented .= '</div>';
+    endwhile;
 
-// Envia para a view
-echo $aside_commented;
+endif;
+
+?>
+
+<div class="aside_block">
+    <?php echo $html_view ?>
+</div>

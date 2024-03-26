@@ -51,7 +51,6 @@ SQL;
         // Avisa ao banco de dados para executar a query
         $stmt->execute();
 
-
     endif;
 
 endif;
